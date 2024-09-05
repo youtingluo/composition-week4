@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import axios from 'axios'
 import Loading from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
+import Swal from 'sweetalert2/dist/sweetalert2.js'
 const router = useRouter()
 const url = 'https://todolist-api.hexschool.io'
 const user = ref({
@@ -17,11 +18,24 @@ const signup = () => {
     .post(`${url}/users/sign_up`, user.value)
     .then(() => {
       isLoading.value = false
+      Swal.fire({
+        position: 'top',
+        title: '註冊成功',
+        icon: 'success',
+        timer: 2000,
+        toast: true,
+        showConfirmButton: false,
+        timerProgressBar: true
+      })
       router.push('/')
     })
     .catch((err) => {
       isLoading.value = false
-      alert(err.response.data.message)
+      Swal.fire({
+        icon: 'error',
+        title: '請重試一次',
+        text: err.response.data.message
+      })
     })
 }
 </script>

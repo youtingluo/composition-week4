@@ -1,5 +1,6 @@
 import './assets/main.css'
 import 'vue-loading-overlay/dist/css/index.css'
+import 'sweetalert2/src/sweetalert2.scss'
 import { createApp } from 'vue'
 import { Field, Form, ErrorMessage, defineRule, configure } from 'vee-validate'
 // 引入 VeeValidate 的驗證規則

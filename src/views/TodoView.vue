@@ -3,6 +3,7 @@ import axios from 'axios'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Loading from 'vue-loading-overlay'
+import Swal from 'sweetalert2/dist/sweetalert2.js'
 const router = useRouter()
 const url = 'https://todolist-api.hexschool.io'
 const nickname = ref('')
@@ -25,7 +26,11 @@ const checkLogin = () => {
     })
     .catch((err) => {
       isLoading.value = false
-      alert(err.response.data.message)
+      Swal.fire({
+        icon: 'error',
+        title: '請重試一次',
+        text: err.response.data.message
+      })
       router.push('/')
     })
 }
@@ -41,14 +46,21 @@ const getTodos = () => {
     })
     .catch((err) => {
       isLoading.value = false
-      alert(err.response.data.message)
+      Swal.fire({
+        icon: 'error',
+        title: '請重試一次',
+        text: err.response.data.message
+      })
     })
 }
 // 新增 todo
 const todo = ref('')
 const addTodo = () => {
   if (!todo.value.trim()) {
-    alert('請輸入內容')
+    Swal.fire({
+      icon: 'error',
+      text: '請輸入內容'
+    })
     todo.value = ''
     return
   }
@@ -59,9 +71,22 @@ const addTodo = () => {
       todo.value = ''
       isLoading.value = false
       getTodos()
+      Swal.fire({
+        position: 'top',
+        title: '新增成功',
+        icon: 'success',
+        timer: 2000,
+        toast: true,
+        showConfirmButton: false,
+        timerProgressBar: true
+      })
     })
     .catch((err) => {
-      alert(err.response.data.message)
+      Swal.fire({
+        icon: 'error',
+        title: '請重試一次',
+        text: err.response.data.message
+      })
       isLoading.value = false
     })
 }
@@ -73,11 +98,23 @@ const removeTodo = (todo) => {
     .then((res) => {
       getTodos()
       isLoading.value = false
-      alert(res.data.message)
+      Swal.fire({
+        position: 'top',
+        title: res.data.message,
+        icon: 'success',
+        timer: 2000,
+        toast: true,
+        showConfirmButton: false,
+        timerProgressBar: true
+      })
     })
     .catch((err) => {
       isLoading.value = false
-      alert(err.response.data.message)
+      Swal.fire({
+        icon: 'error',
+        title: '請重試一次',
+        text: err.response.data.message
+      })
     })
 }
 // 編輯 todo
@@ -92,12 +129,24 @@ const confirmEdit = (todo) => {
     .then((res) => {
       getTodos()
       isLoading.value = false
-      alert(res.data.message)
+      Swal.fire({
+        position: 'top',
+        title: res.data.message,
+        icon: 'success',
+        timer: 2000,
+        toast: true,
+        showConfirmButton: false,
+        timerProgressBar: true
+      })
       editCatch.value = {}
     })
     .catch((err) => {
       isLoading.value = false
-      alert(err.response.data.message)
+      Swal.fire({
+        icon: 'error',
+        title: '請重試一次',
+        text: err.response.data.message
+      })
     })
 }
 // 修改狀態
@@ -108,10 +157,22 @@ const toggleTodo = (todo) => {
     .then((res) => {
       getTodos()
       isLoading.value = false
-      alert(res.data.message)
+      Swal.fire({
+        position: 'top',
+        title: res.data.message,
+        icon: 'success',
+        timer: 2000,
+        toast: true,
+        showConfirmButton: false,
+        timerProgressBar: true
+      })
     })
     .catch((err) => {
-      alert(err.response.data.message)
+      Swal.fire({
+        icon: 'error',
+        title: '請重試一次',
+        text: err.response.data.message
+      })
       isLoading.value = false
     })
 }
@@ -138,13 +199,25 @@ const logout = () => {
     .post(`${url}/users/sign_out`)
     .then((res) => {
       isLoading.value = false
-      alert(res.data.message)
+      Swal.fire({
+        position: 'top',
+        title: res.data.message,
+        icon: 'success',
+        timer: 2000,
+        toast: true,
+        showConfirmButton: false,
+        timerProgressBar: true
+      })
       document.cookie = 'myToken=;'
       router.push('/')
     })
     .catch((err) => {
       isLoading.value = false
-      alert(err.response.data.message)
+      Swal.fire({
+        icon: 'error',
+        title: '請重試一次',
+        text: err.response.data.message
+      })
     })
 }
 onMounted(() => {

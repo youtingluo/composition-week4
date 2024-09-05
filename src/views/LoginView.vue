@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import axios from 'axios'
 import Loading from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
+import Swal from 'sweetalert2/dist/sweetalert2.js'
 const router = useRouter()
 const url = 'https://todolist-api.hexschool.io'
 const user = ref({
@@ -18,11 +19,25 @@ const login = () => {
       const { exp, token } = res.data
       document.cookie = `myToken=${token}; expires=${new Date(exp * 1000).toUTCString()};`
       router.push('/todo')
+      Swal.fire({
+        position: 'top',
+        title: '登入成功',
+        icon: 'success',
+        timer: 2000,
+        toast: true,
+        showConfirmButton: false,
+        timerProgressBar: true
+      })
     })
     .catch((err) => {
       isLoading.value = false
-      alert(err.response.data.message)
-      user.value.resetForm()
+      user.value = {}
+      Swal.fire({
+        icon: 'error',
+        title: '請重試一次',
+        text: err.response.data.message
+      })
+      user.value = {}
     })
 }
 const isLoading = ref(false)
