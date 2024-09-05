@@ -1,0 +1,1 @@
+import{u as t,h as s,c as n,d as r,o as u}from"./index-ChMq0LXP.js";const p={__name:"NotFoundView",setup(a){const o=t();return s(()=>{o.push("/")}),(l,e)=>(u(),n("div",null,e[0]||(e[0]=[r("h1",null,"找不到此頁面",-1)])))}};export{p as default};
