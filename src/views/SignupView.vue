@@ -1,3 +1,29 @@
+<script setup>
+import { ref } from 'vue'
+import axios from 'axios'
+import router from '@/router'
+const url = 'https://todolist-api.hexschool.io'
+const user = ref({
+  email: '',
+  password: '',
+  nickname: ''
+})
+const uid = ref('')
+const signup = () => {
+  axios
+    .post(`${url}/users/sign_up`, user.value)
+    .then((res) => {
+      console.log(res)
+      uid.value = res.data.uid
+      alert(`註冊成功，Uid 為 ${uid.value}`)
+      router.push('/')
+    })
+    .catch((err) => {
+      alert(err.response.data.message)
+    })
+}
+</script>
+
 <template>
   <div id="signUpPage" class="bg-yellow">
     <div class="conatiner signUpPage vhContainer">
@@ -23,6 +49,7 @@
           <h2 class="formControls_txt">註冊帳號</h2>
           <label class="formControls_label" for="email">Email</label>
           <input
+            v-model="user.email"
             class="formControls_input"
             type="email"
             id="email"
@@ -32,6 +59,7 @@
           />
           <label class="formControls_label" for="name">您的暱稱</label>
           <input
+            v-model="user.nickname"
             class="formControls_input"
             type="text"
             name="name"
@@ -40,6 +68,7 @@
           />
           <label class="formControls_label" for="pwd">密碼</label>
           <input
+            v-model="user.password"
             class="formControls_input"
             type="password"
             name="pwd"
@@ -56,7 +85,8 @@
             placeholder="請再次輸入密碼"
             required
           />
-          <button type="button" class="btnLink">註冊</button>
+          {{ user }}
+          <button type="button" class="btnLink" @click="signup">註冊</button>
         </form>
       </div>
     </div>

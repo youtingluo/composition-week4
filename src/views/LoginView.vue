@@ -1,5 +1,31 @@
 <script setup>
-import { RouterLink } from 'vue-router'
+import { onMounted, ref } from 'vue'
+import axios from 'axios'
+import router from '@/router'
+const url = 'https://todolist-api.hexschool.io'
+const user = ref({
+  email: '',
+  password: ''
+})
+const login = () => {
+  axios
+    .post(`${url}/users/sign_in`, user.value)
+    .then((res) => {
+      console.log(res)
+      const { exp, token } = res.data
+      console.log(exp, token)
+
+      alert(`登入成功`)
+      document.cookie = `myToken=${token}; expires=${new Date(exp * 1000).toUTCString()};`
+      router.push('/todo')
+    })
+    .catch((err) => {
+      alert(err.response.data.message)
+    })
+}
+onMounted(() => {
+  console.log(import.meta.env.BASE_URL)
+})
 </script>
 
 <template>
@@ -27,6 +53,7 @@ import { RouterLink } from 'vue-router'
           <h2 class="formControls_txt">最實用的線上代辦事項服務</h2>
           <label class="formControls_label" for="login-email">Email</label>
           <input
+            v-model="user.email"
             class="formControls_input"
             type="email"
             id="login-email"
@@ -37,6 +64,7 @@ import { RouterLink } from 'vue-router'
           <span>此欄位不可留空</span>
           <label class="formControls_label" for="login-pwd">密碼</label>
           <input
+            v-model="user.password"
             class="formControls_input"
             type="password"
             name="pwd"
@@ -44,7 +72,7 @@ import { RouterLink } from 'vue-router'
             placeholder="請輸入密碼"
             required
           />
-          <button type="button" class="btnLink">登入</button>
+          <button type="button" class="btnLink" @click="login">登入</button>
         </form>
       </div>
     </div>
