@@ -1,34 +1,35 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import axios from 'axios'
-import router from '@/router'
+import Loading from 'vue-loading-overlay'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const url = 'https://todolist-api.hexschool.io'
 const user = ref({
   email: '',
   password: ''
 })
 const login = () => {
+  isLoading.value = true
   axios
     .post(`${url}/users/sign_in`, user.value)
     .then((res) => {
-      console.log(res)
+      isLoading.value = false
       const { exp, token } = res.data
-      console.log(exp, token)
-
       alert(`登入成功`)
       document.cookie = `myToken=${token}; expires=${new Date(exp * 1000).toUTCString()};`
       router.push('/todo')
     })
     .catch((err) => {
+      isLoading.value = false
       alert(err.response.data.message)
     })
 }
-onMounted(() => {
-  console.log(import.meta.env.BASE_URL)
-})
+const isLoading = ref(false)
 </script>
 
 <template>
+  <loading :active="isLoading" />
   <div id="loginPage" class="bg-yellow">
     <div class="conatiner loginPage vhContainer">
       <div class="side">

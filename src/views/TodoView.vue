@@ -1,12 +1,13 @@
 <script setup>
-import router from '@/router'
 import axios from 'axios'
-import Loading from 'vue-loading-overlay'
-import 'vue-loading-overlay/dist/css/index.css'
 import { computed, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import Loading from 'vue-loading-overlay'
+const router = useRouter()
 const url = 'https://todolist-api.hexschool.io'
 const nickname = ref('')
 const checkLogin = () => {
+  isLoading.value = true
   const cookieValue = document.cookie
     .split('; ')
     .find((row) => row.startsWith('myToken'))
@@ -19,8 +20,11 @@ const checkLogin = () => {
     .get(`${url}/users/checkout`)
     .then((res) => {
       nickname.value = res.data.nickname
+      getTodos()
+      isLoading.value = false
     })
     .catch((err) => {
+      isLoading.value = false
       alert(err.response.data.message)
       router.push('/')
     })
@@ -130,7 +134,7 @@ const logout = () => {
     .then((res) => {
       isLoading.value = false
       alert(res.data.message)
-      document.cookie = "myToken='';"
+      document.cookie = 'myToken=;'
       router.push('/')
     })
     .catch((err) => {
@@ -140,7 +144,6 @@ const logout = () => {
 }
 onMounted(() => {
   checkLogin()
-  getTodos()
 })
 </script>
 <template>
@@ -150,11 +153,9 @@ onMounted(() => {
       <h1><a href="#">ONLINE TODO LIST</a></h1>
       <ul>
         <li class="todo_sm">
-          <a href="#"
-            ><span>{{ nickname }}</span></a
-          >
+          <span>{{ nickname }}</span>
         </li>
-        <li><a href="#loginPage" @click.prevent="logout">登出</a></li>
+        <li><a href="#" @click.prevent="logout">登出</a></li>
       </ul>
     </nav>
     <div class="conatiner todoListPage vhContainer">

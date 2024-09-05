@@ -1,5 +1,6 @@
 <script setup>
-import router from '@/router'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 import { onMounted } from 'vue'
 
 onMounted(() => {

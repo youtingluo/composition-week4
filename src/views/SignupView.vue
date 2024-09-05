@@ -1,30 +1,33 @@
 <script setup>
 import { ref } from 'vue'
 import axios from 'axios'
-import router from '@/router'
+import Loading from 'vue-loading-overlay'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const url = 'https://todolist-api.hexschool.io'
 const user = ref({
   email: '',
   password: '',
   nickname: ''
 })
-const uid = ref('')
+const isLoading = ref(false)
 const signup = () => {
+  isLoading.value = true
   axios
     .post(`${url}/users/sign_up`, user.value)
-    .then((res) => {
-      console.log(res)
-      uid.value = res.data.uid
-      alert(`註冊成功，Uid 為 ${uid.value}`)
+    .then(() => {
+      isLoading.value = false
       router.push('/')
     })
     .catch((err) => {
+      isLoading.value = false
       alert(err.response.data.message)
     })
 }
 </script>
 
 <template>
+  <loading :active="isLoading" />
   <div id="signUpPage" class="bg-yellow">
     <div class="conatiner signUpPage vhContainer">
       <div class="side">
