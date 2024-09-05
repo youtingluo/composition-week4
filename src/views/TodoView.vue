@@ -47,6 +47,11 @@ const getTodos = () => {
 // 新增 todo
 const todo = ref('')
 const addTodo = () => {
+  if (!todo.value.trim()) {
+    alert('請輸入內容')
+    todo.value = ''
+    return
+  }
   isLoading.value = true
   axios
     .post(`${url}/todos/`, { content: todo.value })
@@ -123,7 +128,7 @@ const data = computed(() => {
   }
 })
 const doneLength = computed(() => {
-  return todoData.value.filter((item) => item.status).length
+  return todoData.value.filter((item) => !item.status).length
 })
 const isLoading = ref(false)
 // 登出
@@ -228,7 +233,8 @@ onMounted(() => {
               </li>
             </ul>
             <div class="todoList_statistics">
-              <p>{{ doneLength }} 個已完成項目</p>
+              <p v-if="!todoData.length">目前尚無待辦事項</p>
+              <p v-else>{{ doneLength }} 個待完成項目</p>
             </div>
           </div>
         </div>

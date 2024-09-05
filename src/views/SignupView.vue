@@ -44,53 +44,47 @@ const signup = () => {
         />
       </div>
       <div>
-        <form class="formControls" action="index.html">
+        <VForm class="formControls" @submit="signup">
           <div class="router-wrap">
             <RouterLink to="/" class="router-link">登入頁</RouterLink>
             <RouterLink to="/signup" class="router-link">註冊頁</RouterLink>
           </div>
           <h2 class="formControls_txt">註冊帳號</h2>
           <label class="formControls_label" for="email">Email</label>
-          <input
+          <VField
             v-model="user.email"
             class="formControls_input"
             type="email"
             id="email"
-            name="email"
+            name="Email"
             placeholder="請輸入 email"
-            required
+            rules="required|email"
           />
+          <ErrorMessage name="Email" />
           <label class="formControls_label" for="name">您的暱稱</label>
-          <input
+          <VField
             v-model="user.nickname"
             class="formControls_input"
             type="text"
-            name="name"
+            name="暱稱"
             id="name"
             placeholder="請輸入您的暱稱"
+            rules="required"
           />
+          <ErrorMessage name="暱稱" />
           <label class="formControls_label" for="pwd">密碼</label>
-          <input
+          <VField
             v-model="user.password"
             class="formControls_input"
             type="password"
-            name="pwd"
+            name="密碼"
             id="pwd"
             placeholder="請輸入密碼"
-            required
+            rules="required|min:6"
           />
-          <label class="formControls_label" for="pwd2">再次輸入密碼</label>
-          <input
-            class="formControls_input"
-            type="password"
-            name="pwd"
-            id="pwd2"
-            placeholder="請再次輸入密碼"
-            required
-          />
-          {{ user }}
-          <button type="button" class="btnLink" @click="signup">註冊</button>
-        </form>
+          <ErrorMessage name="密碼" />
+          <button type="submit" class="btnLink">註冊</button>
+        </VForm>
       </div>
     </div>
   </div>
